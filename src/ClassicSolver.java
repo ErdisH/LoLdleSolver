@@ -19,133 +19,299 @@ public class ClassicSolver {
     ArrayList<String> correctRegion = new ArrayList<String>();
     ArrayList<String> correctYear = new ArrayList<String>();
 
-    public void addToWrongList(String itemToAdd, int index){
-        switch (index) {
-            case 0:
-                if(!wrongNames.contains(itemToAdd)) {
-                    wrongNames.add(itemToAdd);
-                }
-                break;
-            case 1:
-                if(!wrongGender.contains(itemToAdd)) {
-                    wrongGender.add(itemToAdd);
-                }
-                break;
-            case 2:
-                if(!wrongPositions.contains(itemToAdd)) {
-                    wrongPositions.add(itemToAdd);
-                }
-                break;
-            case 3:
-                if(!wrongSpecies.contains(itemToAdd)) {
-                    wrongSpecies.add(itemToAdd);
-                }
-                break;
-            case 4:
-                if(!wrongRessource.contains(itemToAdd)) {
-                    wrongRessource.add(itemToAdd);
-                }
-                break;
-            case 5:
-                if(!wrongRangeType.contains(itemToAdd)) {
-                    wrongRangeType.add(itemToAdd);
-                }
-                break;
-            case 6:
-                if(!wrongRegion.contains(itemToAdd)) {
-                    wrongRegion.add(itemToAdd);
-                }
-                break;
-            case 7:
-                if(!wrongYear.contains(itemToAdd)) {
-                    System.out.println("trying to add bad year " + itemToAdd);
-                    wrongYear.add(itemToAdd);
-                }
-                break;
+    ArrayList<String> remainingChamps = new ArrayList<String>();
+
+    public ClassicSolver(){
+        for(Champion c : champList){
+            remainingChamps.add(c.getName());
         }
     }
 
-    public void addToRightList(String itemToAdd, int index){
-        switch (index) {
-            case 1:
-                if(!correctGender.contains(itemToAdd)) {
-                    correctGender.add(itemToAdd);
-                }
-                break;
-            case 2:
-                if(!correctPosition.contains(itemToAdd)) {
-                    correctPosition.add(itemToAdd);
-                }
-                break;
-            case 3:
-                if(!correctSpecies.contains(itemToAdd)) {
-                    correctSpecies.add(itemToAdd);
-                }
-                break;
-            case 4:
-                if(!correctRessource.contains(itemToAdd)) {
-                    correctRessource.add(itemToAdd);
-                }
-                break;
-            case 5:
-                if(!correctRangeType.contains(itemToAdd)) {
-                    correctRangeType.add(itemToAdd);
-                }
-                break;
-            case 6:
-                if(!correctRegion.contains(itemToAdd)) {
-                    correctRegion.add(itemToAdd);
-                }
-                break;
-            case 7:
-                if(!correctYear.contains(itemToAdd)) {
-                    correctYear.add(itemToAdd);
-                }
-                break;
-        }
-    }
-
-    public void suggestChamps(Champion[] validChamps){
+    public void suggestChamps(){
         System.out.println("List of champs valid for next guess");
 
-        for(Champion c : validChamps){
+        for(String c : remainingChamps){
             System.out.println(c);
         }
     }
 
-    public Champion[] getValidChamps(){
-        Champion[] validChamps = new Champion[ChampDB.CHAMP_QT];
-        int i = 0;
+    public void getValidChamps(String champGuessed, String answer){
+        removeInvalidChampions(champGuessed,answer);
 
-        for(Champion c : champList){
-            if(isChampValid(c))
-            {
-                validChamps[i++] = c;
-            }
-        }
-
-        suggestChamps(validChamps);
-
-        return validChamps;
+        suggestChamps();
     }
 
-    public boolean isChampValid(Champion champ){
-        for(Champion c : champList) {
-            if(!wrongNames.contains(c.getName())){
-                if(!wrongGender.contains(c.getGender()))
-                    if(!wrongPositions.contains(c.getPosition())){
-                        if(!wrongSpecies.contains(c.getSpecies())){
-                            if(!wrongRessource.contains(c.getResource())){
-                                if(!wrongRangeType.contains(c.getRangeType())){
-                                    if(!wrongYear.contains(String.valueOf(c.getReleaseYear()))){
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
+    private void removeInvalidChampions(String champGuessed,String answer) {
+        Champion champ = getChampion(champGuessed);
+
+        if(remainingChamps.contains(champGuessed)){
+            remainingChamps.remove(champGuessed);
+        }
+
+        for(Champion c : champList){
+            if(!isChampGenderValid(c.getName(),champ.getGender(),answer.charAt(1))){
+                remainingChamps.remove(c.getName());
+            }
+            if(!isChampPositionValid(c.getName(),champ.getPosition(),answer.charAt(2))){
+                remainingChamps.remove(c.getName());
+            }
+            if(!isChampSpeciesValid(c.getName(),champ.getSpecies(),answer.charAt(3))){
+                remainingChamps.remove(c.getName());
+            }
+            if(!isChampResourceValid(c.getName(),champ.getResource(),answer.charAt(4))){
+                remainingChamps.remove(c.getName());
+            }
+            if(!isChampRangeTypeValid(c.getName(),champ.getRangeType(),answer.charAt(5))){
+                remainingChamps.remove(c.getName());
+            }
+            if(!isChampRegionValid(c.getName(),champ.getRegion(),answer.charAt(6))){
+                remainingChamps.remove(c.getName());
+            }
+            if(!isChampYearValid(c.getName(),String.valueOf(champ.getReleaseYear()),answer.charAt(7), answer.charAt(8))){
+                remainingChamps.remove(c.getName());
+            }
+        }
+    }
+
+    public boolean isChampGenderValid(String champ, String guess, char output){
+
+        for(Champion  c : champList){
+            if(c.getName().equals(champ)){
+                if(output == 'c'){
+                    if(c.getGender().equals(guess)){
+                        return true;
                     }
+                    else {
+                        return false;
+                    }
+                }
+                else if(output == 'p'){
+                    if(c.getGender().contains(guess) || c.getGender().contains(guess)){
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else if(output == 'w'){
+                    if(c.getGender().contains(guess)){
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
             }
         }
         return false;
+    }
+
+    public boolean isChampPositionValid(String champ, String guess, char output){
+        for(Champion  c : champList){
+            if(c.getName().equals(champ)){
+                if(output == 'c'){
+                    if(c.getPosition().equals(guess)){
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else if(output == 'p'){
+                    if(c.getPosition().contains(guess) || guess.contains(c.getPosition())){
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else if(output == 'w'){
+                    if(c.getPosition().contains(guess)){
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isChampSpeciesValid(String champ, String guess, char output){
+
+        for(Champion  c : champList){
+            if(c.getName().equals(champ)){
+                if(output == 'c'){
+                    if(c.getSpecies().equals(guess)){
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else if(output == 'p'){
+                    if(c.getSpecies().contains(guess) || guess.contains(c.getSpecies())){
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else if(output == 'w'){
+                    if(c.getSpecies().contains(guess)){
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isChampResourceValid(String champ, String guess, char output){
+
+        for(Champion  c : champList){
+            if(c.getName().equals(champ)){
+                if(output == 'c'){
+                    if(c.getResource().equals(guess)){
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else if(output == 'p'){
+                    if(c.getResource().contains(guess) || guess.contains(c.getResource())){
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else if(output == 'w'){
+                    if(c.getResource().contains(guess)){
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isChampRangeTypeValid(String champ, String guess, char output){
+
+        for(Champion  c : champList){
+            if(c.getName().equals(champ)){
+                if(output == 'c'){
+                    if(c.getRangeType().equals(guess)){
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else if(output == 'p'){
+                    if(c.getRangeType().contains(guess) || guess.contains(c.getRangeType())){
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else if(output == 'w'){
+                    if(c.getRangeType().contains(guess)){
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isChampRegionValid(String champ, String guess, char output){
+
+        for(Champion  c : champList){
+            if(c.getName().equals(champ)){
+                if(output == 'c'){
+                    if(c.getRegion().equals(guess) || guess.contains(c.getRegion())){
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else if(output == 'p'){
+                    if(c.getRegion().contains(guess)){
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else if(output == 'w'){
+                    if(c.getRegion().contains(guess)){
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isChampYearValid(String champ, String guess, char output, char overUnder){
+        for(Champion  c : champList){
+            if(c.getName().equals(champ)){
+                int champYear = c.getReleaseYear();
+                int guessInteger = Integer.parseInt(guess);
+                if(output == 'c'){
+                    if(c.getRegion().equals(guess)){
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else if(output == 'w'){
+                    if(overUnder == 'o'){
+                        if(champYear < guessInteger){
+                            return false;
+                        }
+                        else {
+                            return true;
+                        }
+                    }
+                    else if((overUnder == 'u')){
+                        if(champYear > guessInteger){
+                            return false;
+                        }
+                        else {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public Champion getChampion(String champ){
+        for(int i = 0; i <champList.length; i++ ){
+            if(champList[i].getName().equals(champ)){
+                return champList[i];
+            }
+        }
+        return null;
     }
 }
