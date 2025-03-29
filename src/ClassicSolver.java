@@ -94,7 +94,7 @@ public class ClassicSolver {
                     }
                 }
                 else if(output == 'w'){
-                    if(c.getGender().contains(guess)){
+                    if(c.getGender().contains(guess) || c.getGender().contains(guess)){
                         return false;
                     }
                     else {
@@ -126,7 +126,7 @@ public class ClassicSolver {
                     }
                 }
                 else if(output == 'w'){
-                    if(c.getPosition().contains(guess)){
+                    if(c.getPosition().contains(guess) || guess.contains(c.getPosition())){
                         return false;
                     }
                     else {
@@ -159,7 +159,7 @@ public class ClassicSolver {
                     }
                 }
                 else if(output == 'w'){
-                    if(c.getSpecies().contains(guess)){
+                    if(c.getSpecies().contains(guess) || guess.contains(c.getSpecies())){
                         return false;
                     }
                     else {
@@ -192,7 +192,7 @@ public class ClassicSolver {
                     }
                 }
                 else if(output == 'w'){
-                    if(c.getResource().contains(guess)){
+                    if(c.getResource().contains(guess) || guess.contains(c.getResource())){
                         return false;
                     }
                     else {
@@ -225,7 +225,7 @@ public class ClassicSolver {
                     }
                 }
                 else if(output == 'w'){
-                    if(c.getRangeType().contains(guess)){
+                    if(c.getRangeType().contains(guess) || guess.contains(c.getRangeType())){
                         return false;
                     }
                     else {
@@ -242,7 +242,7 @@ public class ClassicSolver {
         for(Champion  c : champList){
             if(c.getName().equals(champ)){
                 if(output == 'c'){
-                    if(c.getRegion().equals(guess) || guess.contains(c.getRegion())){
+                    if(c.getRegion().equals(guess)){
                         return true;
                     }
                     else {
@@ -250,7 +250,7 @@ public class ClassicSolver {
                     }
                 }
                 else if(output == 'p'){
-                    if(c.getRegion().contains(guess)){
+                    if(c.getRegion().contains(guess) || guess.contains(c.getRegion())){
                         return true;
                     }
                     else {
@@ -258,7 +258,7 @@ public class ClassicSolver {
                     }
                 }
                 else if(output == 'w'){
-                    if(c.getRegion().contains(guess)){
+                    if(c.getRegion().contains(guess) || guess.contains(c.getRegion())){
                         return false;
                     }
                     else {
@@ -276,7 +276,7 @@ public class ClassicSolver {
                 int champYear = c.getReleaseYear();
                 int guessInteger = Integer.parseInt(guess);
                 if(output == 'c'){
-                    if(c.getRegion().equals(guess)){
+                    if(champYear == guessInteger){
                         return true;
                     }
                     else {
@@ -285,7 +285,7 @@ public class ClassicSolver {
                 }
                 else if(output == 'w'){
                     if(overUnder == 'o'){
-                        if(champYear < guessInteger){
+                        if(champYear <= guessInteger){
                             return false;
                         }
                         else {
@@ -293,7 +293,7 @@ public class ClassicSolver {
                         }
                     }
                     else if((overUnder == 'u')){
-                        if(champYear > guessInteger){
+                        if(champYear >= guessInteger){
                             return false;
                         }
                         else {
