@@ -18,23 +18,62 @@ public class Main {
 
 
         while(!found) {
-            System.out.println("Enter your guess");
+            System.out.println("Enter your guess (enter f to end or if found)");
             champGuess = scan.nextLine();
 
-            System.out.println("Enter result (cwp) = correct, wrong, partial, write all 7 fields. Enter f if found");
-            answer = scan.nextLine();
-
-            if(answer.equals("f")){
+            if(champGuess.equals("f")){
                 break;
             }
 
-            cs.getValidChamps(champGuess,answer);
+            cs.getValidChamps(champGuess,guessDialog());
 
         }
 
         System.out.println("Yay we got it!");
 
 
+    }
+
+    public static String guessDialog(){
+        Scanner scan = new Scanner(System.in);
+        String answer = "";
+        String nextAnswer = "";
+
+        System.out.println("Was champion correct? (c = correct, w = wrong, p = partial");
+        nextAnswer = scan.nextLine();
+        answer+=nextAnswer;
+        if(answer.equals("c"))
+            return "cccccccco";
+
+        System.out.println("Was gender correct? (c = correct, w = wrong, p = partial");
+        nextAnswer = scan.nextLine();
+        answer+=nextAnswer;
+
+        System.out.println("Was role correct? (c = correct, w = wrong, p = partial");
+        nextAnswer = scan.nextLine();
+        answer+=nextAnswer;
+
+        System.out.println("Was species correct? (c = correct, w = wrong, p = partial");
+        nextAnswer = scan.nextLine();
+        answer+=nextAnswer;
+
+        System.out.println("Was resource correct? (c = correct, w = wrong, p = partial");
+        nextAnswer = scan.nextLine();
+        answer+=nextAnswer;
+
+        System.out.println("Was range type correct? (c = correct, w = wrong, p = partial");
+        nextAnswer = scan.nextLine();
+        answer+=nextAnswer;
+
+        System.out.println("Was region correct? (c = correct, w = wrong, p = partial");
+        nextAnswer = scan.nextLine();
+        answer+=nextAnswer;
+
+        System.out.println("Was year correct? (co = correct, wo = wrong-over, wu = wrong-under");
+        nextAnswer = scan.nextLine();
+        answer+=nextAnswer;
+
+        return answer;
     }
 
 }
